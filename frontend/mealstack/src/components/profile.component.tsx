@@ -1,13 +1,50 @@
 // src/components/Profile.tsx
 import { useAuth } from '../auth/AuthContext';
 import { Navigate } from 'react-router-dom';
+import {useEffect, useState} from "react";
+import axios from "axios";
+import authHeader from "../services/auth-headers.ts";
+
+interface Recipe {
+    id: number;
+    title: string;
+    description: string;
+    sourceUrl?: string;
+    createdAt: string;
+    tag: "DESSERT" | "BREAKFAST" | "LUNCH" | "PROTEIN" | "SNACK";
+}
+
+const API_URL = "/api/recipes";
 
 const Profile = () => {
     const { user } = useAuth();
 
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
     if (!user) {
         return <Navigate to="/home" replace />;
     }
+
+    useEffect(() => {
+        if (!user) return;
+
+        const fetchRecipes = async () => {
+            try {
+                const response = await axios.get<Recipe[]>(API_URL, { headers: authHeader() });
+                setRecipes(response.data);
+                setError(null);
+            } catch (err) {
+                console.error(err);
+                setError("Failed to load recipes");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRecipes();
+    }, [user]);
 
     return (
         <div className="container">
@@ -42,6 +79,14 @@ const Profile = () => {
                                             <div className="d-flex justify-content-between">
                                                 <span className="fw-bold">Email:</span>
                                                 <span>{user.email}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {recipes && (
+                                        <div className="list-group-item">
+                                            <div className="d-flex justify-content-between">
+                                                <span className="fw-bold">Saved Recipes:</span>
+                                                <span>{recipes.length}</span>
                                             </div>
                                         </div>
                                     )}

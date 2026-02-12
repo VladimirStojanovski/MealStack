@@ -1,9 +1,71 @@
+//package com.example.mealstack.service.impl;
+//
+//import com.example.mealstack.model.Recipe;
+//import com.example.mealstack.repositories.RecipeRepository;
+//import com.example.mealstack.service.RecipeService;
+//import org.springframework.stereotype.Service;
+//
+//import java.time.LocalDateTime;
+//import java.util.List;
+//
+//@Service
+//public class RecipeServiceImpl implements RecipeService {
+//
+//    private final RecipeRepository recipeRepository;
+//
+//    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+//        this.recipeRepository = recipeRepository;
+//    }
+//
+//    @Override
+//    public List<Recipe> getAllRecipes() {
+//        return recipeRepository.findAll();
+//    }
+//
+//    @Override
+//    public Recipe getRecipeById(Long id) {
+//        return recipeRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Recipe not found with id " + id));
+//    }
+//
+//    @Override
+//    public Recipe createRecipe(Recipe recipe) {
+//        recipe.setCreatedAt(LocalDateTime.now());
+//        return recipeRepository.save(recipe);
+//    }
+//
+//    @Override
+//    public Recipe updateRecipe(Long id, Recipe recipe) {
+//        Recipe existing = getRecipeById(id);
+//
+//        existing.setTitle(recipe.getTitle());
+//        existing.setDescription(recipe.getDescription());
+//        existing.setSourceUrl(recipe.getSourceUrl());
+//        existing.setTag(recipe.getTag());
+//
+//        return recipeRepository.save(existing);
+//    }
+//
+//    @Override
+//    public void deleteRecipe(Long id) {
+//        Recipe existing = getRecipeById(id);
+//        recipeRepository.delete(existing);
+//    }
+//}
+//
+
+
 package com.example.mealstack.service.impl;
 
 import com.example.mealstack.model.Recipe;
+import com.example.mealstack.model.User;
 import com.example.mealstack.repositories.RecipeRepository;
+import com.example.mealstack.repositories.UserRepository;
 import com.example.mealstack.service.RecipeService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,31 +74,56 @@ import java.util.List;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final UserRepository userRepository;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
+        this.userRepository = userRepository;
+    }
+
+    private User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            return userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        }
+        throw new RuntimeException("User not authenticated");
     }
 
     @Override
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+    public List<Recipe> getAllRecipesForCurrentUser() {
+        User currentUser = getCurrentUser();
+        return recipeRepository.findByUser(currentUser);
     }
 
     @Override
-    public Recipe getRecipeById(Long id) {
-        return recipeRepository.findById(id)
+    public Recipe getRecipeByIdForCurrentUser(Long id) {
+        User currentUser = getCurrentUser();
+        Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Recipe not found with id " + id));
+
+        if (!recipe.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You don't have permission to access this recipe");
+        }
+
+        return recipe;
     }
 
     @Override
-    public Recipe createRecipe(Recipe recipe) {
+    @Transactional
+    public Recipe createRecipeForCurrentUser(Recipe recipe) {
+        User currentUser = getCurrentUser();
+        recipe.setUser(currentUser);
         recipe.setCreatedAt(LocalDateTime.now());
         return recipeRepository.save(recipe);
     }
 
     @Override
-    public Recipe updateRecipe(Long id, Recipe recipe) {
-        Recipe existing = getRecipeById(id);
+    @Transactional
+    public Recipe updateRecipeForCurrentUser(Long id, Recipe recipe) {
+        User currentUser = getCurrentUser();
+        Recipe existing = getRecipeByIdForCurrentUser(id);
 
         existing.setTitle(recipe.getTitle());
         existing.setDescription(recipe.getDescription());
@@ -47,9 +134,9 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteRecipe(Long id) {
-        Recipe existing = getRecipeById(id);
+    @Transactional
+    public void deleteRecipeForCurrentUser(Long id) {
+        Recipe existing = getRecipeByIdForCurrentUser(id);
         recipeRepository.delete(existing);
     }
 }
-

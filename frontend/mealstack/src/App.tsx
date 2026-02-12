@@ -11,6 +11,8 @@ import BoardUser from "./components/board-user.component";
 import BoardAdmin from "./components/board-admin.component";
 import DownloadForm from "./components/download-videos.component";
 import logo from "./assets/logo.png";
+import AboutUs from "./components/AboutUs.tsx"; // <-- import
+
 
 const AppContent = () => {
     const { user, isAdmin, logout, isLoading } = useAuth();
@@ -59,12 +61,17 @@ const AppContent = () => {
                                 <>
                                     <li className="nav-item">
                                         <NavLink to="/user" className="nav-link">
-                                            Recepies
+                                            Cookbook
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink to="/download" className="nav-link">
                                             Downloader
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink to="/about" className="nav-link">
+                                            About Us
                                         </NavLink>
                                     </li>
                                 </>
@@ -126,6 +133,8 @@ const AppContent = () => {
                         <Route path="/home" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/about" element={<AboutUs />} />
+
 
                         <Route
                             path="/profile"
@@ -169,9 +178,10 @@ const AppContent = () => {
             </main>
 
             {/* ================= FOOTER ================= */}
-            <footer className="meal-footer">
-                MealStack@2026, FINKI
+            <footer className="meal-footer d-flex justify-content-center align-items-center py-3">
+                <span>MealStack@2026, FINKI</span>
             </footer>
+
         </div>
     );
 };

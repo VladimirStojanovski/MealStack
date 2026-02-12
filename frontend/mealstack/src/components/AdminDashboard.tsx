@@ -12,18 +12,6 @@ const AdminDashboard = () => {
     const { isAdmin } = useAuth();
     const [loading, setLoading] = useState(true);
 
-    const handleRefreshCookie = async () => {
-        try {
-            const response = await UserService.refreshCookie();
-        } catch (error: any) {
-            const msg =
-                error?.response?.data ||
-                error?.message ||
-                "Something went wrong refreshing the cookie.";
-        }
-    };
-
-
     useEffect(() => {
         if (!isAdmin) return;
 
@@ -65,12 +53,6 @@ const AdminDashboard = () => {
         <div className="admin-dashboard">
             <h2 className="mb-4">Admin Dashboard</h2>
 
-            <div className="mb-4">
-                <Button variant="success" onClick={handleRefreshCookie}>
-                    🔄 Refresh TikTok Cookie
-                </Button>
-            </div>
-
             {/* Admins Table */}
             <div className="card shadow-sm">
                 <div className="card-header">
@@ -83,8 +65,6 @@ const AdminDashboard = () => {
                             <th>Id</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Number Of Downloads</th>
-                            <th>Last Download</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -93,8 +73,6 @@ const AdminDashboard = () => {
                                 <td>{admin.id}</td>
                                 <td>{admin.username}</td>
                                 <td>{admin.email}</td>
-                                <td>{admin.numDownloads}</td>
-                                <td>{new Date(admin.lastDownloadDate).toLocaleString()}</td>
                             </tr>
                         ))}
                         </tbody>
@@ -114,8 +92,6 @@ const AdminDashboard = () => {
                             <th>Id</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Number Of Downloads</th>
-                            <th>Last Download</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -125,8 +101,6 @@ const AdminDashboard = () => {
                                 <td>{user.id}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
-                                <td>{user.numDownloads}</td>
-                                <td>{new Date(user.lastDownloadDate).toLocaleString()}</td>
                                 <td>
                                     <Button variant="outline-primary" size="sm">
                                         Edit
@@ -135,7 +109,6 @@ const AdminDashboard = () => {
                                         Delete
                                     </Button>
                                 </td>
-
                             </tr>
                         ))}
                         </tbody>

@@ -55,6 +55,23 @@ body {
   color: #ffffff !important;
 }
 
+.meal-footer a {
+  color: #fff;
+}
+
+.meal-footer a:hover {
+  text-decoration: underline;
+  color: #0d6efd; /* Bootstrap primary color */
+}
+
+.team-avatar img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 3px solid #0d6efd; /* Bootstrap primary color */
+}
+
+
 /* ===== Center the middle menu on desktop only ===== */
 @media (min-width: 992px) {
   .meal-navbar .container-fluid {
