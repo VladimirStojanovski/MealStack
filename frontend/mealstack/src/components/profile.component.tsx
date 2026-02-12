@@ -29,6 +29,14 @@ const Profile = () => {
                             <div className="mb-4">
                                 <h5 className="mb-3 text-muted">Account Details</h5>
                                 <div className="list-group">
+                                    {user.username && (
+                                        <div className="list-group-item">
+                                            <div className="d-flex justify-content-between">
+                                                <span className="fw-bold">Username:</span>
+                                                <span>{user.username}</span>
+                                            </div>
+                                        </div>
+                                    )}
                                     {user.email && (
                                         <div className="list-group-item">
                                             <div className="d-flex justify-content-between">
@@ -37,27 +45,9 @@ const Profile = () => {
                                             </div>
                                         </div>
                                     )}
-                                    {user.id && (
-                                        <div className="list-group-item">
-                                            <div className="d-flex justify-content-between">
-                                                <span className="fw-bold">User ID:</span>
-                                                <span>{user.id}</span>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
 
-                            <div>
-                                <h5 className="mb-3 text-muted">Roles</h5>
-                                <ul className="list-group">
-                                    {user.roles?.map((role, index) => (
-                                        <li key={index} className="list-group-item">
-                                            {role}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from '../assets/logo.png';
+import {useAuth} from "../auth/AuthContext.tsx";
 
 const Home: React.FC = () => {
+    const { user } = useAuth();
+
     return (
         <div
             className="d-flex justify-content-center align-items-center"
@@ -68,17 +71,28 @@ const Home: React.FC = () => {
                     YouTube and more.
                 </p>
 
-                <div className="d-flex justify-content-center gap-4 mt-3">
-                    <Link to="/login" className="btn btn-primary btn-lg px-5">
-                        Login
-                    </Link>
+                {!user ? (
+                    <div className="d-flex justify-content-center gap-4 mt-3">
+                        <Link to="/login" className="btn btn-primary btn-lg px-5">
+                            Login
+                        </Link>
 
-                    <Link to="/register" className="btn btn-outline-primary btn-lg px-5">
-                        Register
-                    </Link>
-                </div>
+                        <Link to="/register" className="btn btn-outline-primary btn-lg px-5">
+                            Register
+                        </Link>
+                    </div>
+                ): (
+                    <div className="d-flex justify-content-center gap-4 mt-3">
+                        Welcome {user.username}
+                    </div>
+                )
+
+                }
+
             </div>
+
         </div>
+
     );
 };
 

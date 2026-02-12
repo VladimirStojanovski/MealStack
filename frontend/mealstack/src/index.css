@@ -1,89 +1,100 @@
-.app-navbar {
-  width: 100%;
-  background: #1f2937;
-  color: #e5e7eb;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+/* ========== Global basics ========== */
+html, body, #root {
+  height: 100%;
+  margin: 0;
 }
 
-.navbar-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* ✅ left group vs right group */
-  gap: 16px;
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-.navbar-brand {
-  font-weight: 800;
-  color: #fff;
-  font-size: 18px;
-  text-decoration: none;
-}
-
-.navbar-links {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.navbar-links a {
-  color: #e5e7eb;
-  font-weight: 600;
-  font-size: 14px;
-  text-decoration: none;
-  opacity: 0.9;
-}
-
-.navbar-links a:hover,
-.navbar-links a.active {
-  opacity: 1;
-  color: #fff;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.navbar-username {
-  opacity: 0.9;
-}
-
-.navbar-btn {
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: transparent;
-  color: #fff;
-  cursor: pointer;
-}
-
-.navbar-btn:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.navbar-btn-link {
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
-  text-decoration: none;
-}
-
-.navbar-btn-link:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-}
 body {
   overflow-x: hidden;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ========== App layout (sticky footer correct way) ========== */
+/* App.tsx already uses: <div className="app-layout"> and <main className="app-main"> */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;            /* pushes footer to the bottom */
+}
+
+/* ========== Bootstrap Navbar: style like the example ========== */
+.meal-navbar {
+  background: #1f2937 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 58px;
+}
+
+/* logo sizing */
+.meal-navbar .meal-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* make nav links look clean */
+.meal-navbar .nav-link {
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(229, 231, 235, 0.92) !important;
+  opacity: 0.92;
+  transition: opacity 0.15s ease;
+}
+
+.meal-navbar .nav-link:hover {
+  opacity: 1;
+  color: #ffffff !important;
+}
+
+.meal-navbar .nav-link.active {
+  opacity: 1;
+  color: #ffffff !important;
+}
+
+/* ===== Center the middle menu on desktop only ===== */
+@media (min-width: 992px) {
+  .meal-navbar .container-fluid {
+    position: relative;
+  }
+
+  .meal-navbar .meal-nav-center {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 22px;
+  }
+}
+
+/* Mobile spacing (optional but nice) */
+@media (max-width: 991.98px) {
+  .meal-navbar .meal-nav-center {
+    gap: 8px;
+  }
+}
+
+/* Make logout button look like text link in navbar */
+.meal-navbar .btn.btn-link.nav-link {
+  text-decoration: none !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ================= FOOTER ================= */
+.meal-footer {
+  width: 100%;
+  background-color: #374151; /* сивкаста */
+  color: #ffffff;
+  text-align: center;
+  padding: 5px 0; /* околу 20px */
+  font-size: 14px;
+  font-weight: 600;
+
+  /* IMPORTANT: no fixed positioning */
+  position: static;
 }
