@@ -1,0 +1,58 @@
+.download-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.download-info {
+    color: #6c757d;
+    margin-bottom: 2rem;
+}
+
+textarea.form-control {
+    min-height: 150px;
+    margin-bottom: 1.5rem;
+    resize: vertical;
+}
+
+.error-message {
+    color: var(--danger);
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(247, 37, 133, 0.1);
+    border-radius: 8px;
+}
+
+.skipped-section {
+    margin-top: 2rem;
+}
+
+.skipped-list {
+    margin-top: 1rem;
+}
+
+.skipped-item {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--warning);
+}
+
+.skipped-url {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.skipped-reason {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Button styles specific to download page */
+.download-container .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}
