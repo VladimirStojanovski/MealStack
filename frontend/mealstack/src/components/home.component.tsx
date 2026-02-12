@@ -1,45 +1,81 @@
-// src/components/Home.tsx
-import { useState, useEffect } from 'react';
-import UserService from '../services/user.service';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from '../assets/logo.png';
 
-const Home = () => {
-    const [content, setContent] = useState('');
-
-    useEffect(() => {
-        UserService.getPublicContent()
-            .then((response) => {
-                setContent(response.data);
-            })
-            .catch((error) => {
-                setContent(
-                    (error.response && error.response.data) ||
-                    error.message ||
-                    error.toString()
-                );
-            });
-    }, []);
-
+const Home: React.FC = () => {
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-lg-8 text-center">
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body p-5">
-                            <h1 className="display-4 mb-4">{content}</h1>
-                            <p className="lead text-muted mb-4">
-                                Welcome to BulkTok - Your TikTok video downloader
-                            </p>
-                            <div className="d-flex justify-content-center gap-3">
-                                <Link to="/login" className="btn btn-primary btn-lg px-4">
-                                    Login
-                                </Link>
-                                <Link to="/register" className="btn btn-outline-primary btn-lg px-4">
-                                    Register
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                height: "100%",
+                width: "100%",
+                background: "#f8f9fa",
+                overflow: "hidden",
+                padding: "24px",
+            }}
+        >
+            <div
+                className="card shadow border-0 text-center"
+                style={{
+                    maxWidth: 780, // 520 -> 780 (≈ +50%)
+                    width: "100%",
+                    padding: "3rem", // 2rem -> 3rem
+                    borderRadius: "18px",
+                }}
+            >
+                <div
+                    style={{
+                        width: 200,
+                        height: 200,
+                        borderRadius: 22,
+                        margin: "0 auto 2rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <img
+                        src={logo}
+                        alt="MealStack"
+                        style={{
+                            width: "70%",
+                            height: "70%",
+                            objectFit: "contain",
+                        }}
+                    />
+                </div>
+
+
+                <h1
+                    className="mb-3"
+                    style={{
+                        fontSize: "2.8rem", // поголем наслов
+                        fontWeight: 700,
+                    }}
+                >
+                    Welcome to MealStack
+                </h1>
+
+                <p
+                    className="text-muted mb-4"
+                    style={{
+                        fontSize: "1.15rem",
+                        maxWidth: 520,
+                        margin: "0 auto",
+                    }}
+                >
+                    Save and organize your favorite recipe videos from TikTok, Instagram,
+                    YouTube and more.
+                </p>
+
+                <div className="d-flex justify-content-center gap-4 mt-3">
+                    <Link to="/login" className="btn btn-primary btn-lg px-5">
+                        Login
+                    </Link>
+
+                    <Link to="/register" className="btn btn-outline-primary btn-lg px-5">
+                        Register
+                    </Link>
                 </div>
             </div>
         </div>

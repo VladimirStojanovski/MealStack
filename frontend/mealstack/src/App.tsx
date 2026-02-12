@@ -6,6 +6,7 @@ import {ProtectedRoute} from './components/ProtectedRoute';
 import Login from './components/login.component';
 import Register from './components/register.component';
 import Home from './components/home.component';
+import logo from './assets/logo.png';
 import Profile from './components/profile.component';
 import BoardUser from './components/board-user.component';
 import BoardAdmin from './components/board-admin.component';
@@ -34,8 +35,16 @@ const AppContent = () => {
         <div className="app-container">
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container-fluid">
-                    <Link to="/" className="navbar-brand">
-                        BulkTok
+                    <Link to="/home" className="navbar-brand d-flex align-items-center">
+                        <img
+                            src={logo}
+                            alt="MealStack"
+                            style={{
+                                height: "36px",
+                                width: "auto",
+                                objectFit: "contain",
+                            }}
+                        />
                     </Link>
                     <button
                         className="navbar-toggler"
@@ -47,11 +56,6 @@ const AppContent = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav me-auto">
-                            <li className="nav-item">
-                                <Link to="/home" className="nav-link">
-                                    Home
-                                </Link>
-                            </li>
                             {user && (
                                 <>
                                     <li className="nav-item">
