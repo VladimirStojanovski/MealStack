@@ -41,6 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
         existing.setTitle(recipe.getTitle());
         existing.setDescription(recipe.getDescription());
         existing.setSourceUrl(recipe.getSourceUrl());
+        existing.setTag(recipe.getTag());
 
         return recipeRepository.save(existing);
     }
@@ -51,3 +52,4 @@ public class RecipeServiceImpl implements RecipeService {
         recipeRepository.delete(existing);
     }
 }
+

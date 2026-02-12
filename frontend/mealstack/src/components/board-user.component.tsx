@@ -1,6 +1,6 @@
 // src/components/BoardUser.tsx
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { useAuth } from '../auth/AuthContext';
 import authHeader from "../services/auth-headers";
 
@@ -11,7 +11,18 @@ interface Recipe {
     sourceUrl?: string;
     thumbnailUrl?: string;
     createdAt: string;
+    tag: "DESSERT" | "BREAKFAST" | "LUNCH" | "PROTEIN" | "SNACK";
 }
+
+const TAG_OPTIONS: { value: Recipe["tag"]; label: string }[] = [
+    { value: "BREAKFAST", label: "Breakfast" },
+    { value: "LUNCH", label: "Lunch" },
+    { value: "DESSERT", label: "Dessert" },
+    { value: "PROTEIN", label: "Protein" },
+    { value: "SNACK", label: "Snack" },
+];
+
+
 
 const API_URL = "/api/recipes";
 
@@ -27,6 +38,7 @@ const BoardUser: React.FC = () => {
     const [newDescription, setNewDescription] = useState("");
     const [newSourceUrl, setNewSourceUrl] = useState("");
     const [newThumbnailUrl, setNewThumbnailUrl] = useState("");
+    const [newTag, setNewTag] = useState<Recipe["tag"]>("BREAKFAST");
 
     // Edit Recipe Form State
     const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
@@ -34,6 +46,11 @@ const BoardUser: React.FC = () => {
     const [editDescription, setEditDescription] = useState("");
     const [editSourceUrl, setEditSourceUrl] = useState("");
     const [editThumbnailUrl, setEditThumbnailUrl] = useState("");
+    const [editTag, setEditTag] = useState<Recipe["tag"]>("BREAKFAST");
+
+    // Filter state
+    const [filterTag, setFilterTag] = useState<Recipe["tag"] | "ALL">("ALL");
+
 
     const getPlatformIcon = (url?: string) => {
         if (!url) return "🎥"; // default video icon
@@ -70,12 +87,15 @@ const BoardUser: React.FC = () => {
                 title: newTitle,
                 description: newDescription,
                 sourceUrl: newSourceUrl,
-                thumbnailUrl: newThumbnailUrl
+                thumbnailUrl: newThumbnailUrl,
+                tag: newTag
             }, { headers: authHeader() });
+
 
             setRecipes(prev => [...prev, response.data]);
             setShowForm(false);
             setNewTitle(""); setNewDescription(""); setNewSourceUrl(""); setNewThumbnailUrl("");
+            setNewTag("BREAKFAST");
         } catch (err) {
             console.error(err);
             alert("Failed to add recipe");
@@ -101,7 +121,9 @@ const BoardUser: React.FC = () => {
         setEditDescription(recipe.description);
         setEditSourceUrl(recipe.sourceUrl || "");
         setEditThumbnailUrl(recipe.thumbnailUrl || "");
+        setEditTag(recipe.tag);
     };
+
 
     const handleEditRecipe = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -112,8 +134,10 @@ const BoardUser: React.FC = () => {
                 title: editTitle,
                 description: editDescription,
                 sourceUrl: editSourceUrl,
-                thumbnailUrl: editThumbnailUrl
+                thumbnailUrl: editThumbnailUrl,
+                tag: editTag
             }, { headers: authHeader() });
+
 
             setRecipes(prev => prev.map(r => r.id === editingRecipe.id ? response.data : r));
             setEditingRecipe(null);
@@ -132,6 +156,23 @@ const BoardUser: React.FC = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Your Recipes</h2>
                 <button className="btn btn-success" onClick={() => setShowForm(true)}>Add Recipe</button>
+
+                <div className="mb-3 d-flex align-items-center gap-2">
+                    <label className="mb-0 fw-bold">Filter by Tag:</label>
+                    <select
+                        className="form-select w-auto"
+                        value={filterTag}
+                        onChange={(e) => setFilterTag(e.target.value as Recipe["tag"] | "ALL")}
+                    >
+                        <option value="ALL">All</option>
+                        {TAG_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
             </div>
 
             {/* Add Recipe Form */}
@@ -144,6 +185,18 @@ const BoardUser: React.FC = () => {
                             <textarea className="form-control mb-2" placeholder="Description" value={newDescription} onChange={e => setNewDescription(e.target.value)} required/>
                             <input className="form-control mb-2" placeholder="Source URL" value={newSourceUrl} onChange={e => setNewSourceUrl(e.target.value)}/>
                             <input className="form-control mb-2" placeholder="Thumbnail URL" value={newThumbnailUrl} onChange={e => setNewThumbnailUrl(e.target.value)}/>
+                            <select
+                                className="form-select mb-2"
+                                value={newTag}
+                                onChange={e => setNewTag(e.target.value as Recipe["tag"])}
+                            >
+                                {TAG_OPTIONS.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+
                             <div className="d-flex justify-content-end">
                                 <button type="button" className="btn btn-secondary me-2" onClick={() => setShowForm(false)}>Cancel</button>
                                 <button type="submit" className="btn btn-primary">Add Recipe</button>
@@ -163,6 +216,19 @@ const BoardUser: React.FC = () => {
                             <textarea className="form-control mb-2" placeholder="Description" value={editDescription} onChange={e => setEditDescription(e.target.value)} required/>
                             <input className="form-control mb-2" placeholder="Source URL" value={editSourceUrl} onChange={e => setEditSourceUrl(e.target.value)}/>
                             <input className="form-control mb-2" placeholder="Thumbnail URL" value={editThumbnailUrl} onChange={e => setEditThumbnailUrl(e.target.value)}/>
+                            <select
+                                className="form-select mb-2"
+                                value={editTag}
+                                onChange={e => setEditTag(e.target.value as Recipe["tag"])}
+                            >
+                                {TAG_OPTIONS.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+
+
                             <div className="d-flex justify-content-end">
                                 <button type="button" className="btn btn-secondary me-2" onClick={() => setEditingRecipe(null)}>Cancel</button>
                                 <button type="submit" className="btn btn-primary">Save Changes</button>
@@ -173,12 +239,11 @@ const BoardUser: React.FC = () => {
             )}
 
             <div className="row g-3">
-                {recipes.map(recipe => (
+                {recipes
+                    .filter((recipe) => filterTag === "ALL" || recipe.tag === filterTag)
+                    .map((recipe) => (
                     <div key={recipe.id} className="col-md-4">
                         <div className="card h-100 shadow-sm">
-                            {/*{recipe.thumbnailUrl && (*/}
-                            {/*    <img src={recipe.thumbnailUrl} className="card-img-top" alt={recipe.title} style={{ height: "200px", objectFit: "cover" }}/>*/}
-                            {/*)}*/}
                             <div
                                 className="card-thumbnail d-flex align-items-center justify-content-center bg-secondary text-white"
                                 style={{ height: "200px", textAlign: "center" }}
@@ -204,6 +269,10 @@ const BoardUser: React.FC = () => {
                             <div className="card-body d-flex flex-column">
                                 <h5 className="card-title">{recipe.title}</h5>
                                 <p className="card-text text-truncate" style={{ flex: 1 }}>{recipe.description || "No description provided"}</p>
+                                <span className="badge bg-info mb-2">
+    {recipe.tag}
+</span>
+
                                 <div className="mt-3 d-flex justify-content-between">
                                     <button className="btn btn-sm btn-primary" onClick={() => openEditModal(recipe)}>Edit</button>
                                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(recipe.id)}>Delete</button>

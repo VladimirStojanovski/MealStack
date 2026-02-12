@@ -11,8 +11,8 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Set;
+import com.example.mealstack.model.enumerations.RecipeTag;
 
 @Component
 public class DataInitializer {
@@ -42,23 +42,51 @@ public class DataInitializer {
 
         createUserIfNotExists(
                 "VladimirAdmin",
-                "admin@example.com",
+                "vladimiradmin@example.com",
                 "VladimirAdmin123",
                 Set.of(adminRole, userRole)
         );
 
         createUserIfNotExists(
+                "PavelAdmin",
+                "paveladmin@example.com",
+                "PavelAdmin123",
+                Set.of(adminRole, userRole)
+        );
+
+        createUserIfNotExists(
                 "VladimirUser",
-                "user@example.com",
+                "vladimiruser@example.com",
                 "VladimirUser123",
                 Set.of(userRole)
         );
 
+        createUserIfNotExists(
+                "PavelUser",
+                "paveluser@example.com",
+                "PavelUser123",
+                Set.of(userRole)
+        );
+
         mockRecipe(
-                "recept1",
-                "ovoa e desc za recept 1",
-                "www.kuromi",
-                "www.pakuromi"
+                "recipe 1",
+                "Description for recipe 1",
+                "https://www.instagram.com/@bakingfey/video/7480967376327003414?is_from_webapp=1&sender_device=pc&web_id=7605639884845794833",
+                RecipeTag.LUNCH
+        );
+
+        mockRecipe(
+                "recipe 2",
+                "Description for recipe 2",
+                "https://www.tiktok.com/@bakingfey/video/7480967376327003414?is_from_webapp=1&sender_device=pc&web_id=7605639884845794833",
+                RecipeTag.DESSERT
+        );
+
+        mockRecipe(
+                "recipe 3",
+                "Description for recipe 3",
+                "https://www.tiktok.com/@bakingfey/video/7480967376327003414?is_from_webapp=1&sender_device=pc&web_id=7605639884845794833",
+                RecipeTag.BREAKFAST
         );
     }
 
@@ -67,8 +95,8 @@ public class DataInitializer {
                 .orElseGet(() -> roleRepository.save(new Role(roleName)));
     }
 
-    private void mockRecipe(String title, String description, String sourceUrl, String thumbnailUrl) {
-        Recipe recipe = new Recipe(title, description, sourceUrl, thumbnailUrl);
+    private void mockRecipe(String title, String description, String sourceUrl, RecipeTag tag) {
+        Recipe recipe = new Recipe(title, description, sourceUrl, tag);
         recipeRepository.save(recipe);
     }
 

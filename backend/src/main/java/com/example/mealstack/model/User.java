@@ -33,11 +33,6 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @Column(name = "num_downloads", nullable = false, columnDefinition = "integer default 0")
-    private int numDownloads = 0;
-
-    private LocalDateTime lastDownloadDate;
-
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -53,13 +48,8 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.numDownloads = 0;
     }
 
-    public void incrementNumDownloads(int downloads) {
-        numDownloads = numDownloads + downloads;
-        lastDownloadDate = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;
@@ -99,14 +89,6 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-
-    public void setNumDownloads(int numDownloads) {
-        this.numDownloads = numDownloads;
-    }
-
-    public int getNumDownloads() {
-        return numDownloads;
     }
 
     public boolean isEnabled() {
