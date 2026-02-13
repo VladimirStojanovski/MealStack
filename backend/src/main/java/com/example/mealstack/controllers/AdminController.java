@@ -5,7 +5,6 @@ import com.example.mealstack.repositories.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -32,27 +31,23 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> refreshTikTokCookie() {
         try {
-            // Construct the correct path
             String backendDir = System.getProperty("user.dir") + "/backend";
             String scriptPath = backendDir + "/scripts/fetchTikTokCookie.js";
 
             System.out.println("Script path: " + scriptPath);
             System.out.println("Working Directory: " + System.getProperty("user.dir"));
 
-            // Verify the file exists
             File scriptFile = new File(scriptPath);
             if (!scriptFile.exists()) {
                 return ResponseEntity.status(500).body("❌ Script not found at: " + scriptPath);
             }
 
-            // Build and run the process
             ProcessBuilder processBuilder = new ProcessBuilder("node", scriptPath);
-            processBuilder.directory(new File(backendDir)); // Set working directory to backend folder
+            processBuilder.directory(new File(backendDir));
             processBuilder.redirectErrorStream(true);
 
             Process process = processBuilder.start();
 
-            // Read output (important to prevent deadlocks)
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {

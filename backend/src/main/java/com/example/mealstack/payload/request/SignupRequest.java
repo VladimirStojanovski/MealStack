@@ -1,7 +1,6 @@
 package com.example.mealstack.payload.request;
 
 import jakarta.validation.constraints.*;
-
 import java.util.Set;
 
 public class SignupRequest {

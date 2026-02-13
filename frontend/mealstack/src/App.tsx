@@ -11,7 +11,7 @@ import BoardUser from "./components/board-user.component";
 import BoardAdmin from "./components/board-admin.component";
 import DownloadForm from "./components/download-videos.component";
 import logo from "./assets/logo.png";
-import AboutUs from "./components/AboutUs.tsx"; // <-- import
+import AboutUs from "./components/AboutUs.tsx";
 
 
 const AppContent = () => {

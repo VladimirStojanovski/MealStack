@@ -15,7 +15,6 @@ const EditUserModal = ({ user, show, handleClose, onUserUpdated }: EditUserModal
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Populate username/email whenever modal opens or user changes
     useEffect(() => {
         if (user) {
             setUsername(user.username ?? "");

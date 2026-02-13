@@ -20,9 +20,9 @@ const Home: React.FC = () => {
             <div
                 className="card shadow border-0 text-center"
                 style={{
-                    maxWidth: 780, // 520 -> 780 (≈ +50%)
+                    maxWidth: 780,
                     width: "100%",
-                    padding: "3rem", // 2rem -> 3rem
+                    padding: "3rem",
                     borderRadius: "18px",
                 }}
             >
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
                 <h1
                     className="mb-3"
                     style={{
-                        fontSize: "2.8rem", // поголем наслов
+                        fontSize: "2.8rem",
                         fontWeight: 700,
                     }}
                 >

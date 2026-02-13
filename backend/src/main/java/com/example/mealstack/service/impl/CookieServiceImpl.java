@@ -2,7 +2,6 @@ package com.example.mealstack.service.impl;
 
 import com.example.mealstack.service.CookieService;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

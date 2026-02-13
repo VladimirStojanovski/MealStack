@@ -1,8 +1,7 @@
-
 import axios from 'axios';
 import authHeader from './auth-headers';
 
-const API_URL = 'http://localhost:8080/api/'; // <-- matches your backend
+const API_URL = 'http://localhost:8080/api/';
 
 class UserService {
     getAdminBoard() {
